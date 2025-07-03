@@ -1,0 +1,206 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fancy Baby Shower Invitation</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #fef6f0, rgb(156, 154, 155)), url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      overflow-x: hidden;
+      padding: 40px 20px;
+    }
+
+    header {
+      font-size: 2rem;
+      color: #c38b6e;
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: fadeSlide 1s forwards ease;
+    }
+
+    @keyframes fadeSlide {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .envelope {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: radial-gradient(circle at top left, #f0d3b7, #d6a77a);
+      border-radius: 0 0 30px 30px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      border: 2px solid #c38b6e;
+      z-index: 2;
+      transition: opacity 2s ease, height 1s ease;
+      cursor: default;
+    }
+
+    .flap {
+      position: absolute;
+      top: -50%;
+      left: 0;
+      width: 100%;
+      height: 150%;
+      background: radial-gradient(circle at top left, #ddb8a0, #c38b6e);
+      transform: rotate(45deg);
+      transform-origin: bottom center;
+      border-radius: 0 0 30px 30px;
+      z-index: 3;
+      transition: transform 2s ease;
+    }
+
+    /* Cute heart sticker */
+    .sticker {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2rem;
+      color: #e57373;
+      z-index: 4;
+    }
+
+    .card {
+      display: block;
+      width: 100%;
+      max-width: 400px;
+      margin: 20px auto 0;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(50px) scale(0.9);
+    }
+
+    .container.open .flap {
+      transform: rotate(0deg);
+    }
+
+    .container.show-card .card {
+      opacity: 1;
+      animation: fadeBounce 1.2s forwards ease;
+    }
+
+    @keyframes fadeBounce {
+      0% {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+      }
+      60% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1.05);
+      }
+      80% {
+        transform: translateY(0) scale(0.98);
+      }
+      100% {
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .container.hide-envelope .envelope {
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+    }
+
+    .wishlist {
+      margin-top: 40px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1s ease, transform 1s ease;
+      max-width: 90%;
+    }
+
+    .container.show-wishlist ~ .wishlist {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .wishlist a {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #c38b6e;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1em;
+      transition: background 0.3s ease;
+    }
+
+    .wishlist a:hover {
+      background: #a06f50;
+    }
+  </style>
+</head>
+<body>
+
+  <header>You’re Invited!</header>
+
+  <div class="container" id="container">
+    <div class="envelope" id="envelope">
+      <div class="flap"></div>
+      <div class="sticker">💌</div>
+    </div>
+    <img src="images/IMG_4201.PNG" alt="Baby Shower Invitation" class="card" />
+  </div>
+
+  <div class="wishlist">
+    <h3>View Avura Onothoja's Baby Wishlist</h3>
+    <a href="https://www.amazon.co.uk/baby-reg/avura-onothoja-august-2025-kettering/3IOR2EN2AJPN0?ref_=cm_sw_r_apann_dp_7DBYB5T04CXAN1SCHJZ6&language=en_US" target="_blank">View Wishlist on Amazon</a>
+  </div>
+
+  <!-- Confetti -->
+  <canvas id="confetti-canvas" style="position:fixed; pointer-events:none; top:0; left:0; width:100%; height:100%;"></canvas>
+
+  <!-- Pop sound -->
+  <audio id="popSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3" preload="auto"></audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    const container = document.getElementById('container');
+    const popSound = document.getElementById('popSound');
+
+    // Auto run after 3 seconds
+    setTimeout(() => {
+      container.classList.add('open');
+      popSound.play();
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+
+      setTimeout(() => {
+        container.classList.add('hide-envelope');
+        container.classList.add('show-card');
+        container.classList.add('show-wishlist');
+        window.scrollTo({ top: container.offsetTop, behavior: 'smooth' });
+      }, 2000);
+    }, 3000);
+  </script>
+
+</body>
+</html>
